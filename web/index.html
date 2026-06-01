@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <base href="$FLUTTER_BASE_HREF">
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Johann Filmaker — Produção Audiovisual em Belém</title>
+  <meta name="description" content="Videomaker em Belém (PA). Produção audiovisual profissional para empresas, clínicas, eventos corporativos, esportivos e campanhas comerciais. Captação de conteúdo, vídeos institucionais e comerciais.">
+  <meta name="keywords" content="videomaker em Belém, produção audiovisual em Belém, filmagem profissional em Belém, vídeo institucional, produção de conteúdo para empresas, vídeos para redes sociais, cobertura de eventos corporativos, cobertura de eventos esportivos, produção de vídeo publicitário, videomaker corporativo, filmagem para empresas, vídeo comercial, produção audiovisual Pará, videomaker Pará">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Johann Filmaker — Produção Audiovisual em Belém">
+  <meta property="og:description" content="Produção audiovisual especializada para empresas, profissionais e eventos em Belém (PA). Captação de conteúdo, vídeos institucionais, comerciais e cobertura de eventos.">
+  <meta property="og:image" content="icons/Icon-512.png">
+  <meta property="og:locale" content="pt_BR">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Johann Filmaker — Produção Audiovisual em Belém">
+  <meta name="twitter:description" content="Videomaker em Belém (PA) especializado em captação de conteúdo, eventos e campanhas.">
+
+  <!-- iOS -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Johann Filmaker">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="manifest" href="manifest.json">
+
+  <!-- Preload fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="style"
+    href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&family=Inter:wght@400;600&display=swap">
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&family=Inter:wght@400;600&display=swap">
+
+  <style>
+    body {
+      background-color: #0A0806;
+      margin: 0;
+      padding: 0;
+    }
+    #loading {
+      position: fixed;
+      inset: 0;
+      background: #0A0806;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Sora', sans-serif;
+      color: #C9A24B;
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: 2px;
+    }
+  </style>
+</head>
+<body>
+  <div id="loading">Johann.</div>
+  <script src="flutter_bootstrap.js" async></script>
+  <script>
+    window.addEventListener('flutter-first-frame', function() {
+      const el = document.getElementById('loading');
+      if (el) el.remove();
+    });
+  </script>
+</body>
+</html>
