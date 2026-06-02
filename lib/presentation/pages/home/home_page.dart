@@ -58,9 +58,9 @@ class _HeroSection extends StatelessWidget {
             ),
           ),
 
-          // ── Background image (shows automatically once asset is added) ──
+          // ── Background image ──
           Image.asset(
-            'assets/images/hero_bg.jpg',
+            'assets/images/background_header.jpg',
             fit: BoxFit.cover,
             width: double.infinity,
             height: double.infinity,
