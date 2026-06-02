@@ -24,7 +24,7 @@ class Navbar extends StatelessWidget {
 
     return Container(
       height: 68,
-      color: AppColors.background,
+      color: AppColors.surfaceDark,
       padding: EdgeInsets.symmetric(
         horizontal: mobile ? 24 : 48,
       ),
@@ -53,7 +53,7 @@ class _Logo extends StatelessWidget {
         onTap: () => context.go('/'),
         child: MouseRegion(
           cursor: SystemMouseCursors.click,
-          child: Text('Johann.', style: AppTextStyles.logo()),
+          child: Text('Johann.', style: AppTextStyles.logo(color: AppColors.textOnDark)),
         ),
       );
 }
@@ -87,7 +87,7 @@ class _NavLinkState extends State<_NavLink> {
                   widget.label.toUpperCase(),
                   style: widget.active || _hovered
                       ? AppTextStyles.navActive()
-                      : AppTextStyles.nav(),
+                      : AppTextStyles.nav(color: AppColors.textOnDark),
                 ),
                 const SizedBox(height: 3),
                 AnimatedContainer(

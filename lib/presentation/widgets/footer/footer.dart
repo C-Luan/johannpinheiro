@@ -15,10 +15,8 @@ class AppFooter extends StatelessWidget {
 
     return Container(
       width: double.infinity,
+      color: AppColors.surfaceDark,
       padding: EdgeInsets.symmetric(horizontal: hPad, vertical: 40),
-      decoration: const BoxDecoration(
-        border: Border(top: BorderSide(color: AppColors.hairline)),
-      ),
       child: mobile ? _MobileFooter() : _DesktopFooter(),
     );
   }
@@ -29,18 +27,18 @@ class _DesktopFooter extends StatelessWidget {
   Widget build(BuildContext context) => Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text('Johann.', style: AppTextStyles.logo(size: 18)),
+          Text('Johann.', style: AppTextStyles.logo(size: 18, color: AppColors.textOnDark)),
           const Spacer(),
           Text(
             '© 2026 Johann Filmaker — Todos os direitos reservados.',
-            style: AppTextStyles.body(size: 13),
+            style: AppTextStyles.body(size: 13, color: AppColors.textMutedOnDark),
           ),
           const Spacer(),
           Row(
             children: [
               Text(
                 'Feito com luz, sombra e café',
-                style: AppTextStyles.body(size: 13).copyWith(fontStyle: FontStyle.italic),
+                style: AppTextStyles.body(size: 13, color: AppColors.textMutedOnDark).copyWith(fontStyle: FontStyle.italic),
               ),
               const SizedBox(width: 24),
               _SocialIcons(),
@@ -54,19 +52,19 @@ class _MobileFooter extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Column(
         children: [
-          Text('Johann.', style: AppTextStyles.logo(size: 18)),
+          Text('Johann.', style: AppTextStyles.logo(size: 18, color: AppColors.textOnDark)),
           const SizedBox(height: 16),
           _SocialIcons(),
           const SizedBox(height: 16),
           Text(
             '© 2026 Johann Filmaker — Todos os direitos reservados.',
-            style: AppTextStyles.body(size: 12),
+            style: AppTextStyles.body(size: 12, color: AppColors.textMutedOnDark),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 8),
           Text(
             'Feito com luz, sombra e café',
-            style: AppTextStyles.body(size: 12).copyWith(fontStyle: FontStyle.italic),
+            style: AppTextStyles.body(size: 12, color: AppColors.textMutedOnDark).copyWith(fontStyle: FontStyle.italic),
             textAlign: TextAlign.center,
           ),
         ],
