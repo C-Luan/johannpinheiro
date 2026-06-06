@@ -5,11 +5,16 @@ import '../../presentation/pages/portfolio/portfolio_page.dart';
 import '../../presentation/pages/services/services_page.dart';
 import '../../presentation/pages/about/about_page.dart';
 import '../../presentation/pages/contact/contact_page.dart';
+import '../../presentation/pages/splash/splash_page.dart';
 import '../../presentation/widgets/navbar/app_shell.dart';
 
 final appRouter = GoRouter(
-  initialLocation: '/',
+  initialLocation: '/splash',
   routes: [
+    GoRoute(
+      path: '/splash',
+      pageBuilder: (context, state) => _noTransitionPage(const SplashPage(), state),
+    ),
     ShellRoute(
       builder: (context, state, child) => AppShell(child: child),
       routes: [
@@ -37,6 +42,14 @@ final appRouter = GoRouter(
     ),
   ],
 );
+
+CustomTransitionPage<void> _noTransitionPage(Widget child, GoRouterState state) =>
+    CustomTransitionPage<void>(
+      key: state.pageKey,
+      child: child,
+      transitionDuration: Duration.zero,
+      transitionsBuilder: (context, animation, secondary, child) => child,
+    );
 
 CustomTransitionPage<void> _fadePage(Widget child, GoRouterState state) =>
     CustomTransitionPage<void>(

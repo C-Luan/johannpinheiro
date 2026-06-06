@@ -53,7 +53,11 @@ class _Logo extends StatelessWidget {
         onTap: () => context.go('/'),
         child: MouseRegion(
           cursor: SystemMouseCursors.click,
-          child: Text('Johann.', style: AppTextStyles.logo(color: AppColors.textOnDark)),
+          child: Image.asset(
+            'assets/images/logo_mark.png',
+            height: 44,
+            fit: BoxFit.contain,
+          ),
         ),
       );
 }

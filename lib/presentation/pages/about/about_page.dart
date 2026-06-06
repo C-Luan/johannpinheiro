@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
@@ -77,15 +78,70 @@ class _MobileLayout extends StatelessWidget {
       );
 }
 
-class _PhotoBlock extends StatelessWidget {
+class _PhotoBlock extends StatefulWidget {
+  @override
+  State<_PhotoBlock> createState() => _PhotoBlockState();
+}
+
+class _PhotoBlockState extends State<_PhotoBlock> {
+  static const _images = [
+    'assets/images/perfil1.jpg',
+    'assets/images/perfil2.jpg',
+    'assets/images/perfil3.jpg',
+  ];
+
+  int _current = 0;
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = Timer.periodic(const Duration(seconds: 3), (_) {
+      setState(() => _current = (_current + 1) % _images.length);
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) => Stack(
         children: [
-          Container(
+          SizedBox(
             height: 480,
-            color: AppColors.surfaceCard,
-            child: const Center(
-              child: Icon(Icons.person_outline, color: AppColors.hairline, size: 80),
+            width: double.infinity,
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 700),
+              child: Image.asset(
+                _images[_current],
+                key: ValueKey(_current),
+                height: 480,
+                width: double.infinity,
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: 72,
+            left: 0,
+            right: 0,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(_images.length, (i) => AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
+                margin: const EdgeInsets.symmetric(horizontal: 4),
+                width: i == _current ? 20 : 6,
+                height: 6,
+                decoration: BoxDecoration(
+                  color: i == _current
+                      ? AppColors.gold
+                      : AppColors.textOnDark.withValues(alpha: 0.4),
+                  borderRadius: BorderRadius.circular(3),
+                ),
+              )),
             ),
           ),
           Positioned(
@@ -94,7 +150,7 @@ class _PhotoBlock extends StatelessWidget {
             right: 0,
             child: Container(
               padding: const EdgeInsets.all(20),
-              color: AppColors.background.withAlpha(220),
+              color: AppColors.surfaceDark.withValues(alpha: 0.85),
               child: const QuoteBlock('A luz conta a história.'),
             ),
           ),

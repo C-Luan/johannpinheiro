@@ -68,15 +68,18 @@ abstract class StaticData {
   static const List<Differential> differentials = [
     Differential(
       title: 'Produção estratégica',
-      description: 'Cada vídeo é pensado para cumprir um objetivo de comunicação.',
+      description:
+          'Cada vídeo é pensado para cumprir um objetivo de comunicação.',
     ),
     Differential(
       title: 'Qualidade profissional',
-      description: 'Captação e edição com atenção aos detalhes técnicos e narrativos.',
+      description:
+          'Captação e edição com atenção aos detalhes técnicos e narrativos.',
     ),
     Differential(
       title: 'Atendimento personalizado',
-      description: 'Projetos adaptados à realidade e às necessidades de cada cliente.',
+      description:
+          'Projetos adaptados à realidade e às necessidades de cada cliente.',
     ),
     Differential(
       title: 'Experiência em diferentes segmentos',
@@ -86,7 +89,7 @@ abstract class StaticData {
   ];
 
   static const List<ToolItem> tools = [
-    ToolItem(label: 'Captação cinema', value: 'RED · Sony · DJI'),
+    ToolItem(label: 'Captação cinema', value: 'Sony FX30'),
     ToolItem(label: 'Edição & color', value: 'DaVinci Resolve'),
   ];
 }

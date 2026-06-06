@@ -22,7 +22,7 @@ class NavOverlay extends StatelessWidget {
 
     return Positioned.fill(
       child: Material(
-        color: AppColors.background,
+        color: AppColors.surfaceDark,
         child: SafeArea(
           child: Column(
             children: [
@@ -31,7 +31,7 @@ class NavOverlay extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Johann.', style: AppTextStyles.logo()),
+                    Image.asset('assets/images/logo_mark.png', height: 44, fit: BoxFit.contain),
                     GestureDetector(
                       onTap: nav.closeMenu,
                       child: const Icon(Icons.close, color: AppColors.gold, size: 28),
@@ -53,7 +53,7 @@ class NavOverlay extends StatelessWidget {
                 padding: const EdgeInsets.only(bottom: 40),
                 child: Text(
                   'Belém · Pará · Brasil',
-                  style: AppTextStyles.eyebrow().copyWith(color: AppColors.textMuted),
+                  style: AppTextStyles.eyebrow().copyWith(color: AppColors.textMutedOnDark),
                 ),
               ),
             ],
@@ -77,7 +77,7 @@ class _OverlayLink extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 16),
           child: Text(
             label.toUpperCase(),
-            style: AppTextStyles.display(size: 36, weight: FontWeight.w300),
+            style: AppTextStyles.display(size: 36, weight: FontWeight.w300, color: AppColors.textOnDark),
           ),
         ),
       );

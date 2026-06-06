@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../core/providers/portfolio_provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../core/theme/breakpoints.dart';
+import '../../../core/utils/drive_helper.dart';
+import '../../../core/widgets/drive_image.dart';
 import '../../../data/models/work.dart';
 import '../../widgets/common/display_title.dart';
 import '../../widgets/common/eyebrow.dart';
@@ -137,8 +140,28 @@ class _WorksGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final provider = context.watch<PortfolioProvider>();
     final mobile = Breakpoints.isMobile(context);
-    final works = context.watch<PortfolioProvider>().filteredWorks;
+
+    if (provider.loading) {
+      return const SizedBox(
+        height: 240,
+        child: Center(
+          child: CircularProgressIndicator(color: AppColors.gold, strokeWidth: 1.5),
+        ),
+      );
+    }
+
+    final works = provider.filteredWorks;
+
+    if (works.isEmpty) {
+      return SizedBox(
+        height: 240,
+        child: Center(
+          child: Text('Nenhum trabalho nesta categoria.', style: AppTextStyles.body()),
+        ),
+      );
+    }
 
     return LayoutBuilder(builder: (context, constraints) {
       return Wrap(
@@ -157,110 +180,88 @@ class _WorksGrid extends StatelessWidget {
   }
 }
 
-class WorkCard extends StatefulWidget {
+class WorkCard extends StatelessWidget {
   final Work work;
   const WorkCard({super.key, required this.work});
 
-  @override
-  State<WorkCard> createState() => _WorkCardState();
-}
+  Future<void> _open() async {
+    if (work.driveId == null) return;
+    final uri = Uri.parse(DriveHelper.watchUrl(work.driveId!));
+    await launchUrl(uri, mode: LaunchMode.externalApplication);
+  }
 
-class _WorkCardState extends State<WorkCard> {
-  bool _embedLoaded = false;
-
   @override
-  Widget build(BuildContext context) => Container(
-        decoration: BoxDecoration(
-          color: AppColors.surfaceCard,
-          border: Border.all(color: AppColors.hairline),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              height: 240,
-              child: _embedLoaded && widget.work.embedUrl != null
-                  ? _EmbedPlaceholder(url: widget.work.embedUrl!)
-                  : _Thumbnail(
-                      onPlay: widget.work.embedUrl != null
-                          ? () => setState(() => _embedLoaded = true)
-                          : null,
-                    ),
+  Widget build(BuildContext context) => MouseRegion(
+        cursor: work.driveId != null
+            ? SystemMouseCursors.click
+            : MouseCursor.defer,
+        child: GestureDetector(
+          onTap: _open,
+          child: Container(
+            decoration: BoxDecoration(
+              color: AppColors.surfaceCard,
+              border: Border.all(color: AppColors.hairline),
             ),
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 240, child: _Thumbnail(work: work)),
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(child: Text(widget.work.title, style: AppTextStyles.cardTitle())),
-                      const SizedBox(width: 8),
-                      Text('${widget.work.year}', style: AppTextStyles.eyebrow(size: 11)),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(child: Text(work.title, style: AppTextStyles.cardTitle())),
+                          const SizedBox(width: 8),
+                          Text('${work.year}', style: AppTextStyles.eyebrow(size: 11)),
+                        ],
+                      ),
+                      const SizedBox(height: 4),
+                      Text(work.category.label, style: AppTextStyles.body(size: 13)),
                     ],
                   ),
-                  const SizedBox(height: 4),
-                  Text(widget.work.category.label, style: AppTextStyles.body(size: 13)),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ).animate().fadeIn(duration: 300.ms);
 }
 
 class _Thumbnail extends StatelessWidget {
-  final VoidCallback? onPlay;
-  const _Thumbnail({this.onPlay});
+  final Work work;
+  const _Thumbnail({required this.work});
 
   @override
   Widget build(BuildContext context) => Stack(
         fit: StackFit.expand,
         children: [
-          Container(color: AppColors.background),
-          if (onPlay != null)
+          if (work.driveId != null)
+            DriveImage(url: DriveHelper.thumbnail(work.driveId!))
+          else
+            Container(color: AppColors.surfaceCard),
+          Container(
+            color: AppColors.surfaceDark.withValues(alpha: 0.35),
+          ),
+          if (work.driveId != null)
             Center(
-              child: GestureDetector(
-                onTap: onPlay,
-                child: MouseRegion(
-                  cursor: SystemMouseCursors.click,
-                  child: Container(
-                    width: 56,
-                    height: 56,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(color: AppColors.gold, width: 1.5),
-                    ),
-                    child: const Icon(Icons.play_arrow, color: AppColors.gold, size: 28),
-                  ),
+              child: Container(
+                width: 56,
+                height: 56,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(color: AppColors.gold, width: 1.5),
                 ),
+                child: const Icon(Icons.play_arrow, color: AppColors.gold, size: 28),
               ),
             )
           else
             Center(
-              child: Text('Cole o link embed', style: AppTextStyles.body(size: 13)),
+              child: Text('Em breve', style: AppTextStyles.body(size: 13, color: AppColors.textMutedOnDark)),
             ),
         ],
-      );
-}
-
-class _EmbedPlaceholder extends StatelessWidget {
-  final String url;
-  const _EmbedPlaceholder({required this.url});
-
-  @override
-  Widget build(BuildContext context) => Container(
-        color: AppColors.background,
-        child: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Icons.play_circle_fill, color: AppColors.gold, size: 40),
-              const SizedBox(height: 8),
-              Text('Embed carregado', style: AppTextStyles.body(size: 13)),
-            ],
-          ),
-        ),
       );
 }
