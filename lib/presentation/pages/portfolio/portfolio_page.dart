@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../../../core/providers/portfolio_provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
@@ -9,6 +8,7 @@ import '../../../core/theme/app_text_styles.dart';
 import '../../../core/theme/breakpoints.dart';
 import '../../../core/utils/drive_helper.dart';
 import '../../../core/widgets/drive_image.dart';
+import '../../../core/widgets/drive_video.dart';
 import '../../../data/models/work.dart';
 import '../../widgets/common/display_title.dart';
 import '../../widgets/common/eyebrow.dart';
@@ -184,10 +184,13 @@ class WorkCard extends StatelessWidget {
   final Work work;
   const WorkCard({super.key, required this.work});
 
-  Future<void> _open() async {
+  void _openPopup(BuildContext context) {
     if (work.driveId == null) return;
-    final uri = Uri.parse(DriveHelper.watchUrl(work.driveId!));
-    await launchUrl(uri, mode: LaunchMode.externalApplication);
+    showDialog(
+      context: context,
+      barrierColor: AppColors.background.withAlpha(220),
+      builder: (_) => _VideoDialog(work: work),
+    );
   }
 
   @override
@@ -196,7 +199,7 @@ class WorkCard extends StatelessWidget {
             ? SystemMouseCursors.click
             : MouseCursor.defer,
         child: GestureDetector(
-          onTap: _open,
+          onTap: () => _openPopup(context),
           child: Container(
             decoration: BoxDecoration(
               color: AppColors.surfaceCard,
@@ -264,4 +267,106 @@ class _Thumbnail extends StatelessWidget {
             ),
         ],
       );
+}
+
+// ─── Video popup dialog ───────────────────────────────────────────────────────
+
+class _VideoDialog extends StatelessWidget {
+  final Work work;
+  const _VideoDialog({required this.work});
+
+  @override
+  Widget build(BuildContext context) {
+    final screenW = MediaQuery.sizeOf(context).width;
+    final screenH = MediaQuery.sizeOf(context).height;
+    final dialogW = (screenW * 0.85).clamp(320.0, 960.0);
+    final dialogH = dialogW * 9 / 16;
+
+    return Dialog(
+      backgroundColor: Colors.transparent,
+      insetPadding: const EdgeInsets.all(24),
+      child: SizedBox(
+        width: dialogW,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Header: title + close
+            Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      work.title,
+                      style: AppTextStyles.cardTitle(size: 15),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  GestureDetector(
+                    onTap: () => Navigator.of(context).pop(),
+                    child: MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: Container(
+                        padding: const EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: AppColors.hairline),
+                          borderRadius: BorderRadius.circular(2),
+                        ),
+                        child: const Icon(
+                          Icons.close_rounded,
+                          color: AppColors.textMuted,
+                          size: 16,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // Video frame
+            Container(
+              width: dialogW,
+              height: dialogH.clamp(180.0, screenH * 0.75),
+              decoration: BoxDecoration(
+                color: Colors.black,
+                border: Border.all(color: AppColors.hairline),
+              ),
+              child: DriveVideo(
+                embedUrl: DriveHelper.embedUrl(work.driveId!),
+              ),
+            ),
+
+            // Footer: category + year
+            Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: Row(
+                children: [
+                  Text(
+                    work.category.label.toUpperCase(),
+                    style: AppTextStyles.eyebrow(size: 10).copyWith(
+                      color: AppColors.textMuted,
+                      letterSpacing: 2,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Container(width: 1, height: 10, color: AppColors.hairline),
+                  const SizedBox(width: 16),
+                  Text(
+                    '${work.year}',
+                    style: AppTextStyles.eyebrow(size: 10).copyWith(
+                      color: AppColors.textMuted,
+                      letterSpacing: 2,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }

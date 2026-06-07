@@ -4,4 +4,7 @@ abstract class DriveHelper {
 
   static String watchUrl(String driveId) =>
       'https://drive.google.com/file/d/$driveId/view';
+
+  static String embedUrl(String driveId) =>
+      'https://drive.google.com/file/d/$driveId/preview';
 }

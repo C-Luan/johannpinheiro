@@ -22,7 +22,7 @@ class NavOverlay extends StatelessWidget {
 
     return Positioned.fill(
       child: Material(
-        color: AppColors.surfaceDark,
+        color: AppColors.surfaceMedium,
         child: SafeArea(
           child: Column(
             children: [
@@ -31,10 +31,10 @@ class NavOverlay extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Image.asset('assets/images/logo_mark.png', height: 44, fit: BoxFit.contain),
+                    Image.asset('assets/images/logo_mark.png', height: 40, fit: BoxFit.contain),
                     GestureDetector(
                       onTap: nav.closeMenu,
-                      child: const Icon(Icons.close, color: AppColors.gold, size: 28),
+                      child: const Icon(Icons.close_rounded, color: AppColors.gold, size: 24),
                     ),
                   ],
                 ),
@@ -53,7 +53,10 @@ class NavOverlay extends StatelessWidget {
                 padding: const EdgeInsets.only(bottom: 40),
                 child: Text(
                   'Belém · Pará · Brasil',
-                  style: AppTextStyles.eyebrow().copyWith(color: AppColors.textMutedOnDark),
+                  style: AppTextStyles.eyebrow(size: 10).copyWith(
+                    color: AppColors.textMuted,
+                    letterSpacing: 2,
+                  ),
                 ),
               ),
             ],

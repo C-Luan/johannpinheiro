@@ -3,12 +3,12 @@ import 'app_colors.dart';
 
 abstract class AppTheme {
   static ThemeData get dark => ThemeData(
-    brightness: Brightness.light,
+    brightness: Brightness.dark,
     scaffoldBackgroundColor: AppColors.background,
-    colorScheme: const ColorScheme.light(
+    colorScheme: const ColorScheme.dark(
       surface: AppColors.background,
       primary: AppColors.gold,
-      onPrimary: AppColors.background,
+      onPrimary: AppColors.textPrimary,
       onSurface: AppColors.textPrimary,
     ),
     dividerColor: AppColors.hairline,

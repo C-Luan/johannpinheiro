@@ -45,6 +45,8 @@ class AboutPage extends StatelessWidget {
                 'Acredito que todo projeto possui uma história que merece ser contada da maneira certa.',
               ),
               const SizedBox(height: 64),
+              const _DifferentialsSection(),
+              const SizedBox(height: 64),
               const _ToolsSection(),
             ],
           ),
@@ -180,6 +182,74 @@ class _BioText extends StatelessWidget {
             .toList(),
       );
 }
+
+// ─── Diferenciais ────────────────────────────────────────────────────────────
+
+class _DifferentialsSection extends StatelessWidget {
+  const _DifferentialsSection();
+
+  @override
+  Widget build(BuildContext context) {
+    final mobile = Breakpoints.isMobile(context);
+    final items = StaticData.differentials;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(height: 1, color: AppColors.hairline),
+        const SizedBox(height: 32),
+        const Eyebrow('Diferenciais'),
+        const SizedBox(height: 8),
+        LayoutBuilder(builder: (context, constraints) {
+          final cols = mobile ? 1 : 2;
+          return Wrap(
+            spacing: AppSpacing.gridGap,
+            runSpacing: AppSpacing.gridGap,
+            children: List.generate(items.length, (i) {
+              final d = items[i];
+              return SizedBox(
+                width: mobile
+                    ? double.infinity
+                    : (constraints.maxWidth - AppSpacing.gridGap) / cols,
+                child: _DiffCard(
+                  number: '0${i + 1}',
+                  title: d.title,
+                  description: d.description,
+                ),
+              );
+            }),
+          );
+        }),
+      ],
+    );
+  }
+}
+
+class _DiffCard extends StatelessWidget {
+  final String number;
+  final String title;
+  final String description;
+  const _DiffCard({required this.number, required this.title, required this.description});
+
+  @override
+  Widget build(BuildContext context) => Padding(
+        padding: const EdgeInsets.only(top: 32),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(number, style: AppTextStyles.eyebrow(size: 11)),
+            const SizedBox(height: 4),
+            Container(height: 1, width: 40, color: AppColors.hairline),
+            const SizedBox(height: 16),
+            Text(title, style: AppTextStyles.cardTitle()),
+            const SizedBox(height: 8),
+            Text(description, style: AppTextStyles.body()),
+          ],
+        ),
+      );
+}
+
+// ─── Ferramentas ─────────────────────────────────────────────────────────────
 
 class _ToolsSection extends StatelessWidget {
   const _ToolsSection();
